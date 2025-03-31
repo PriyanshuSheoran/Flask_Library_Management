@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js"></script>
+</head>
+<body>
+    <div style="margin-top: 50px;" class="ui container">
+        <h1 class="ui center aligned header">Library Management System</h1>
+
+       
+        <form class="ui form" action="/add" method="post">
+            <div class="field">
+                <label for="title">Book Title</label>
+                <input type="text" name="title" placeholder="Enter Book Title.." required>
+            </div>
+            <div class="field">
+                <label for="author">Author</label>
+                <input type="text" name="author" placeholder="Enter Author Name.." required>
+            </div>
+            <button class="ui blue button" type="submit">Add Book</button>
+        </form>
+
+        
+        {% for book in book_list %}
+        <div class="ui segment">
+            <p class="ui big header"> {{ book.id }} | {{ book.title }} by {{ book.author }} </p>
+
+            {% if book.available %}
+                <span class="ui green label">Available</span>
+            {% else %}
+                <span class="ui red label">Not Available</span>  
+            {% endif %}    
+
+            <a class="ui blue button" href="/update/{{ book.id }}">Update</a>
+            <a class="ui red button" href="/delete/{{ book.id }}">Remove</a>
+        </div>    
+        {% endfor %} 
+    </div>           
+</body>  
+</html>
