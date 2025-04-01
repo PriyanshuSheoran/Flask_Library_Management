@@ -10,8 +10,18 @@
 <body>
     <div style="margin-top: 50px;" class="ui container">
         <h1 class="ui center aligned header">Library Management System</h1>
-
-       
+        
+        <div class="ui menu">
+            {% if current_user.is_authenticated %}
+                <div class="ui item">Welcome, {{ current_user.username }}!</div>
+                <a class="ui item" href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+                <a class="ui item" href="{{ url_for('login') }}">Login</a>
+                <a class="ui item" href="{{ url_for('register') }}">Register</a>
+            {% endif %}
+        </div>
+        
+        {% if current_user.is_authenticated %}
         <form class="ui form" action="/add" method="post">
             <div class="field">
                 <label for="title">Book Title</label>
@@ -23,20 +33,37 @@
             </div>
             <button class="ui blue button" type="submit">Add Book</button>
         </form>
-
+        {% endif %}
         
         {% for book in book_list %}
         <div class="ui segment">
             <p class="ui big header"> {{ book.id }} | {{ book.title }} by {{ book.author }} </p>
 
+           
             {% if book.available %}
                 <span class="ui green label">Available</span>
             {% else %}
                 <span class="ui red label">Not Available</span>  
             {% endif %}    
 
-            <a class="ui blue button" href="/update/{{ book.id }}">Update</a>
-            <a class="ui red button" href="/delete/{{ book.id }}">Remove</a>
+            {% if current_user.is_authenticated %}
+              
+                <div class="ui buttons">
+               
+                    <form action="{{ url_for('update_book', id=book.id) }}" method="POST" style="display:inline;">
+                        <button class="ui blue button" type="submit">
+                            {% if book.available %}
+                                Update
+                            {% else %}
+                                Update
+                            {% endif %}
+                        </button>
+                    </form>
+
+   
+                    <a class="ui red button" href="{{ url_for('delete_book', id=book.id) }}">Remove</a>
+                </div>
+            {% endif %}
         </div>    
         {% endfor %} 
     </div>           
